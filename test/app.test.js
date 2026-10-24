@@ -105,6 +105,12 @@ test('Web Server - GET /mimo-sprite.svg serves SVG asset', async () => {
   assert.ok(res.raw.includes('mimo-full-body'), 'Response must contain mimo elements');
 });
 
+test('Web Server - GET /explainer.html serves architecture explainer', async () => {
+  const res = await makeRequest('/explainer.html');
+  assert.equal(res.status, 200);
+  assert.ok(res.raw.includes('Fly.io Sprites Architecture'), 'Response must contain explainer title');
+});
+
 test.after(() => {
   server.close();
 });

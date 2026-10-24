@@ -114,6 +114,11 @@ app.post('/api/action', (req, res) => {
   });
 });
 
+// Explainer guide route
+app.get(['/explainer', '/explainer.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'explainer.html'));
+});
+
 // Fallback to mascot page for HTML navigation
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
