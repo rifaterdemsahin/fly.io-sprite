@@ -1,0 +1,31 @@
+{
+  "name": "flyio-sprite-mimo",
+  "version": "1.0.0",
+  "description": "Fly.io Sprite for Xiaomi MiMo character with Key Vault integration",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "PORT=${PORT:-8080} node src/index.js",
+    "dev": "PORT=${PORT:-8080} node --watch src/index.js",
+    "test": "node --test test/*.test.js",
+    "setup:sprite": "bash scripts/setup-sprite.sh",
+    "deploy:sprite": "bash scripts/deploy-sprite.sh",
+    "test:remote": "bash scripts/test-remote.sh"
+  },
+  "keywords": [
+    "fly.io",
+    "sprites",
+    "mimo",
+    "xiaomi",
+    "azure-key-vault",
+    "hashicorp-vault"
+  ],
+  "author": "rifaterdemsahin",
+  "license": "MIT",
+  "dependencies": {
+    "@azure/identity": "^4.5.0",
+    "@azure/keyvault-secrets": "^4.9.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

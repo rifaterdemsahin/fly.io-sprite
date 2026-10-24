@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xiaomi MiMo Sprite • Fly.io Sprites</title>
+  <link rel="icon" type="image/svg+xml" href="/mimo-sprite.svg">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(23, 32, 51, 0.75);
+      --border: rgba(255, 255, 255, 0.1);
+      --mi-orange: #ff6900;
+      --mi-orange-glow: rgba(255, 105, 0, 0.35);
+      --cyan: #00f5ff;
+      --cyan-glow: rgba(0, 245, 255, 0.3);
+      --green: #10b981;
+      --green-glow: rgba(16, 185, 129, 0.3);
+      --red: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(255, 105, 0, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(0, 245, 255, 0.08) 0%, transparent 45%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(12px);
+      background: rgba(11, 15, 25, 0.6);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #ff7a00, #ff5000);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #fff;
+      box-shadow: 0 0 15px var(--mi-orange-glow);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      transition: all 0.25s ease;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #64748b;
+    }
+
+    .badge-connected {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+    }
+    .badge-connected .status-dot {
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green-glow);
+      animation: pulse 2s infinite;
+    }
+
+    .badge-fallback {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: rgba(245, 158, 11, 0.12);
+      color: #fbbf24;
+    }
+    .badge-fallback .status-dot {
+      background: #f59e0b;
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+    }
+
+    .badge-disconnected {
+      border-color: rgba(239, 68, 68, 0.4);
+      background: rgba(239, 68, 68, 0.12);
+      color: #f87171;
+    }
+    .badge-disconnected .status-dot {
+      background: var(--red);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Sprite Stage */
+    .sprite-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .stage-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .stage-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .canvas-container {
+      width: 340px;
+      height: 340px;
+      max-width: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+
+    .canvas-glow {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--mi-orange-glow) 0%, transparent 70%);
+      filter: blur(25px);
+      z-index: 0;
+      pointer-events: none;
+      transition: background 0.5s ease;
+    }
+
+    .canvas-glow.active-glow {
+      background: radial-gradient(circle, var(--cyan-glow) 0%, transparent 70%);
+    }
+
+    #mimo-frame {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Controls */
+    .control-panel {
+      width: 100%;
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 0.4rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .btn-toggle {
+      flex: 1;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .btn-toggle:hover {
+      color: #fff;
+    }
+
+    .btn-toggle.active {
+      background: linear-gradient(135deg, #ff7a00, #ff5000);
+      color: #fff;
+      box-shadow: 0 2px 10px var(--mi-orange-glow);
+    }
+
+    .btn-action {
+      padding: 0.75rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 105, 0, 0.5);
+      background: linear-gradient(135deg, rgba(255, 105, 0, 0.15), rgba(255, 80, 0, 0.05));
+      color: #ff9142;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-action:hover {
+      background: linear-gradient(135deg, #ff7a00, #ff5000);
+      color: #fff;
+      border-color: #ff5000;
+      box-shadow: 0 4px 14px var(--mi-orange-glow);
+      transform: translateY(-1px);
+    }
+
+    .btn-action:active {
+      transform: translateY(0);
+    }
+
+    /* Diagnostics & Telemetry Panel */
+    .diagnostics-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .metric-box {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .metric-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .code-console {
+      background: #060911;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      font-family: "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      max-height: 250px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .api-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pill-link {
+      padding: 0.4rem 0.8rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--cyan);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-family: monospace;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .pill-link:hover {
+      background: rgba(0, 245, 255, 0.12);
+      border-color: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan-glow);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    footer a {
+      color: var(--mi-orange);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-icon">Mi</div>
+      <div>
+        <div class="brand-title">Xiaomi MiMo Sprite</div>
+        <div class="brand-subtitle">Fly.io Org: erdem-391 • Port 8080</div>
+      </div>
+    </div>
+    <div class="header-badges">
+      <div id="vault-badge" class="badge">
+        <span class="status-dot"></span>
+        <span id="vault-badge-text">Vault: Checking...</span>
+      </div>
+      <div id="mimo-badge" class="badge">
+        <span class="status-dot"></span>
+        <span id="mimo-badge-text">MiMo Key: Checking...</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Mascot Stage -->
+    <section class="card sprite-stage">
+      <div class="stage-header">
+        <h2 class="stage-title">Interactive MiMo Character</h2>
+        <span id="state-label" class="badge" style="color: var(--mi-orange); border-color: rgba(255, 105, 0, 0.3);">State: Idle</span>
+      </div>
+
+      <div class="canvas-container">
+        <div id="canvas-glow" class="canvas-glow"></div>
+        <object id="mimo-frame" data="/mimo-sprite.svg" type="image/svg+xml" aria-label="Xiaomi MiMo Sprite Mascot"></object>
+      </div>
+
+      <div class="control-panel">
+        <div class="button-group">
+          <button id="btn-idle" class="btn-toggle active" onclick="setMascotState('idle')">
+            <span>✨</span> Idle (Float & Blink)
+          </button>
+          <button id="btn-active" class="btn-toggle" onclick="setMascotState('active')">
+            <span>👋</span> Active (Wave & Spark)
+          </button>
+          <button id="btn-thinking" class="btn-toggle" onclick="setMascotState('thinking')">
+            <span>🧠</span> Thinking (Orbit)
+          </button>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; width: 100%;">
+          <button class="btn-action" style="flex: 1;" onclick="triggerAction('wave')">
+            <span>👋 Wave Mascot</span>
+          </button>
+          <button class="btn-action" style="flex: 1;" onclick="refreshVaultSync()">
+            <span>🔄 Re-sync Key Vault</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diagnostics & Status -->
+    <section class="card diagnostics-panel">
+      <div>
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Sprite Runtime Telemetry</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          Dynamically synchronized with Azure / HashiCorp Key Vault and Fly.io microVM environment.
+        </p>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric-box">
+          <span class="metric-label">Key Vault Status</span>
+          <span id="stat-vault" class="metric-value">Loading...</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-label">MiMo Key Configured</span>
+          <span id="stat-mimo" class="metric-value">Loading...</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-label">Secret Source</span>
+          <span id="stat-source" class="metric-value" style="font-size: 0.9rem; font-family: monospace;">-</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-label">Memory Cache Status</span>
+          <span id="stat-cache" class="metric-value" style="font-size: 0.9rem; font-family: monospace;">-</span>
+        </div>
+      </div>
+
+      <div>
+        <span class="metric-label" style="display: block; margin-bottom: 0.5rem;">Direct API Endpoints</span>
+        <div class="api-pills">
+          <button class="pill-link" onclick="fetchEndpoint('/api/status')">GET /api/status</button>
+          <button class="pill-link" onclick="fetchEndpoint('/healthz')">GET /healthz</button>
+          <button class="pill-link" onclick="refreshVaultSync()">POST /api/refresh</button>
+        </div>
+      </div>
+
+      <div>
+        <span class="metric-label" style="display: block; margin-bottom: 0.5rem;">Live API Response Inspector (Zero Secret Exposure)</span>
+        <div id="console-output" class="code-console">// Fetching live telemetry...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Fly.io Sprite Target: <strong>mimo-sprite</strong> • Org: <strong>erdem-391</strong> • Port: <strong>8080</strong> • 
+    <a href="https://github.com/rifaterdemsahin/fly.io-sprite" target="_blank">rifaterdemsahin/fly.io-sprite</a>
+  </footer>
+
+  <script>
+    let currentState = 'idle';
+
+    function getSvgRoot() {
+      const frame = document.getElementById('mimo-frame');
+      if (frame && frame.contentDocument) {
+        return frame.contentDocument.getElementById('sprite-root');
+      }
+      return null;
+    }
+
+    function setMascotState(state) {
+      currentState = state;
+      document.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`btn-${state}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const stateLabel = document.getElementById('state-label');
+      if (stateLabel) {
+        stateLabel.textContent = `State: ${state.charAt(0).toUpperCase() + state.slice(1)}`;
+      }
+
+      const glow = document.getElementById('canvas-glow');
+      if (glow) {
+        if (state === 'active') glow.classList.add('active-glow');
+        else glow.classList.remove('active-glow');
+      }
+
+      const svgRoot = getSvgRoot();
+      if (svgRoot) {
+        svgRoot.className.baseVal = `sprite-root ${state}`;
+      }
+
+      // Notify backend of action
+      fetch('/api/action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: state })
+      }).catch(() => {});
+    }
+
+    function triggerAction(actionName) {
+      setMascotState('active');
+      setTimeout(() => {
+        setMascotState('idle');
+      }, 3500);
+    }
+
+    async function fetchEndpoint(url) {
+      const consoleEl = document.getElementById('console-output');
+      try {
+        consoleEl.textContent = `// Querying ${url}...`;
+        const res = await fetch(url);
+        const data = await res.json();
+        consoleEl.textContent = `// ${url} [HTTP ${res.status}]\n` + JSON.stringify(data, null, 2);
+      } catch (err) {
+        consoleEl.textContent = `// Error fetching ${url}: ${err.message}`;
+      }
+    }
+
+    async function loadStatus() {
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+
+        // Update indicators
+        const vaultBadge = document.getElementById('vault-badge');
+        const vaultBadgeText = document.getElementById('vault-badge-text');
+        const mimoBadge = document.getElementById('mimo-badge');
+        const mimoBadgeText = document.getElementById('mimo-badge-text');
+
+        if (data.vaultConnected) {
+          vaultBadge.className = 'badge badge-connected';
+          vaultBadgeText.textContent = 'Vault: Connected';
+          document.getElementById('stat-vault').innerHTML = '<span style="color: var(--green);">● Connected</span>';
+        } else if (data.mimoConfigured && data.metadata?.activeSource?.startsWith('local-env')) {
+          vaultBadge.className = 'badge badge-fallback';
+          vaultBadgeText.textContent = 'Vault: Local Fallback';
+          document.getElementById('stat-vault').innerHTML = '<span style="color: #fbbf24;">● Fallback (.env)</span>';
+        } else {
+          vaultBadge.className = 'badge badge-disconnected';
+          vaultBadgeText.textContent = 'Vault: Disconnected';
+          document.getElementById('stat-vault').innerHTML = '<span style="color: var(--red);">● Disconnected</span>';
+        }
+
+        if (data.mimoConfigured) {
+          mimoBadge.className = 'badge badge-connected';
+          mimoBadgeText.textContent = 'MiMo Key: Configured';
+          document.getElementById('stat-mimo').innerHTML = '<span style="color: var(--green);">● Active & Ready</span>';
+        } else {
+          mimoBadge.className = 'badge badge-disconnected';
+          mimoBadgeText.textContent = 'MiMo Key: Missing';
+          document.getElementById('stat-mimo').innerHTML = '<span style="color: var(--red);">● Missing Key</span>';
+        }
+
+        document.getElementById('stat-source').textContent = data.metadata?.activeSource || 'None';
+        document.getElementById('stat-cache').textContent = data.metadata?.cached ? 'Cached in Memory' : 'Live Fetched';
+
+        const consoleEl = document.getElementById('console-output');
+        consoleEl.textContent = `// Initialized GET /api/status [HTTP ${res.status}]\n` + JSON.stringify(data, null, 2);
+      } catch (err) {
+        console.error('Status fetch error:', err);
+      }
+    }
+
+    async function refreshVaultSync() {
+      const consoleEl = document.getElementById('console-output');
+      consoleEl.textContent = '// Refreshing Key Vault synchronization via POST /api/refresh...';
+      try {
+        const res = await fetch('/api/refresh', { method: 'POST' });
+        const data = await res.json();
+        consoleEl.textContent = `// POST /api/refresh [HTTP ${res.status}]\n` + JSON.stringify(data, null, 2);
+        await loadStatus();
+        setMascotState('thinking');
+        setTimeout(() => setMascotState('idle'), 2000);
+      } catch (err) {
+        consoleEl.textContent = `// Refresh error: ${err.message}`;
+      }
+    }
+
+    // Attach listeners on load
+    window.addEventListener('load', () => {
+      loadStatus();
+      const frame = document.getElementById('mimo-frame');
+      if (frame) {
+        frame.addEventListener('load', () => {
+          setMascotState('idle');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
