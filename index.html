@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fly.io Sprites Architecture & Asset Guide</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              900: '#2e1065',
+            },
+            fly: {
+              violet: '#a855f7',
+              cyan: '#06b6d4',
+              emerald: '#10b981',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom subtle glassmorphism and scanline styles */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .dark .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .code-glow {
+      box-shadow: 0 0 35px -5px rgba(139, 92, 246, 0.15);
+    }
+    /* Modal transitions */
+    #imageModal {
+      transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-[#0B0F19] text-slate-800 dark:text-slate-100 font-sans antialiased selection:bg-purple-500 selection:text-white transition-colors duration-200">
+
+  <!-- Top Announcement / GitHub Ribbon -->
+  <div class="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 text-white text-xs sm:text-sm font-medium py-2 px-4 text-center flex items-center justify-center gap-2 shadow-sm">
+    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/20">Documentation</span>
+    <span>Analyzing workflow captures from <code class="font-mono bg-black/20 px-1.5 py-0.5 rounded text-white">rifaterdemsahin/fly.io-sprite/assets</code></span>
+    <a href="https://github.com/rifaterdemsahin/fly.io-sprite" target="_blank" rel="noopener noreferrer" class="underline hover:text-purple-200 inline-flex items-center gap-1 font-semibold ml-1">
+      View Repo <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+    </a>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 glass-card">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-600 to-fuchsia-500 flex items-center justify-center text-white shadow-md shadow-purple-500/20">
+          <i data-lucide="sparkles" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-white">Fly.io Sprites</span>
+          <span class="text-xs text-purple-600 dark:text-purple-400 font-mono block -mt-1 font-medium">assets/ explainability</span>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+        <a href="#overview" class="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Overview</a>
+        <a href="#why-assets" class="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Why These Assets?</a>
+        <a href="#breakdown" class="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Asset Breakdown</a>
+        <a href="#cheatsheet" class="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">CLI Cheatsheet</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <!-- Dark Mode Toggle Button -->
+        <button id="themeToggle" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition" aria-label="Toggle theme">
+          <i data-lucide="moon" id="themeIcon" class="w-5 h-5"></i>
+        </button>
+        <!-- GitHub CTA -->
+        <a href="https://github.com/rifaterdemsahin/fly.io-sprite" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 transition shadow-sm">
+          <i data-lucide="github" class="w-4 h-4"></i>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="overview" class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden border-b border-slate-200 dark:border-slate-800/80">
+    <div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(120,119,198,0.18),rgba(255,255,255,0))]"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 mb-6">
+          <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+          Visual Architecture & Execution Walkthrough
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
+          Why Use the Images in the <br class="hidden sm:inline" />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-500">
+            fly.io-sprite / assets
+          </span> Directory?
+        </h1>
+        <p class="mt-6 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+          The <span class="font-semibold text-purple-600 dark:text-purple-400">Fly Sprites</span> platform introduces an AI-first paradigm: persistent Linux microVMs optimized for autonomously driven execution, sandboxing, and coding agents like Claude Code, Gemini, and Cursor. Here is an exhaustive breakdown of why each screenshot in the repository was recorded and how each proves key capabilities.
+        </p>
+
+        <!-- Quick Metrics -->
+        <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-left">
+          <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="text-xs font-mono text-purple-600 dark:text-purple-400 uppercase font-semibold">Asset 1</div>
+            <div class="text-sm font-bold text-slate-900 dark:text-white mt-1">Fly Apps vs Sprites</div>
+            <p class="text-xs text-slate-500 mt-1">Architectural decision baseline</p>
+          </div>
+          <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="text-xs font-mono text-purple-600 dark:text-purple-400 uppercase font-semibold">Asset 2</div>
+            <div class="text-sm font-bold text-slate-900 dark:text-white mt-1">Multi-Agent Hub</div>
+            <p class="text-xs text-slate-500 mt-1">10+ pre-installed agent targets</p>
+          </div>
+          <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="text-xs font-mono text-purple-600 dark:text-purple-400 uppercase font-semibold">Asset 3 & 4</div>
+            <div class="text-sm font-bold text-slate-900 dark:text-white mt-1">CLI & OAuth Loop</div>
+            <p class="text-xs text-slate-500 mt-1">Web terminal & headless auth</p>
+          </div>
+          <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="text-xs font-mono text-purple-600 dark:text-purple-400 uppercase font-semibold">Asset 5</div>
+            <div class="text-sm font-bold text-slate-900 dark:text-white mt-1">Task Orchestration</div>
+            <p class="text-xs text-slate-500 mt-1">Key Vault + Sprite deployment</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Why These Assets Exist -->
+  <section id="why-assets" class="py-16 md:py-20 bg-slate-100/50 dark:bg-slate-900/30 border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-12">
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+          <span class="p-2 rounded-lg bg-purple-600/10 text-purple-600 dark:text-purple-400">
+            <i data-lucide="info" class="w-6 h-6"></i>
+          </span>
+          The Purpose Behind Visual Documentation
+        </h2>
+        <p class="mt-4 text-slate-600 dark:text-slate-300">
+          When building cloud-native infrastructure for autonomous coding agents, visual proof is essential for reproducibility, security auditing, and onboarding. These images document five distinct stages in the agent sandbox lifecycle:
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
+            <i data-lucide="scale" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-bold text-lg text-slate-900 dark:text-white">1. Conceptual Distinction</h3>
+          <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Developers often confuse standard <strong>Fly Apps (Fly Machines)</strong> with <strong>Fly Sprites</strong>. The comparison image visually cements that while Apps target incoming HTTP web traffic, Sprites target sandboxed agent execution with 100 GB persistent storage and instant resume checkpoints.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-4">
+            <i data-lucide="terminal" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-bold text-lg text-slate-900 dark:text-white">2. Headless Dev Ergonomics</h3>
+          <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            The web terminal captures reveal real hurdles developers face (such as browser popup blocks during OAuth, keyring encryption warnings in ephemeral shells, and port binding to <code class="text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">0.0.0.0:8080</code>) with practical step-by-step resolution.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4">
+            <i data-lucide="cpu" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-bold text-lg text-slate-900 dark:text-white">3. Autonomous Agent Execution</h3>
+          <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            The final chrometerminal workflow shows the concrete hand-off: an agent receives a structured prompt, automatically targets organization <code class="text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">erdem-391</code>, configures Key Vault secrets, and deploys the mascot web app without manual friction.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Deep Dive Image-by-Image -->
+  <section id="breakdown" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
+      
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Image Asset Deep Dive</h2>
+        <p class="mt-3 text-slate-600 dark:text-slate-400">
+          Click any preview card to inspect the high-resolution capture or check the verified repository path.
+        </p>
+      </div>
+
+      <!-- Item 1: Comparison Table -->
+      <div class="grid lg:grid-cols-12 gap-8 items-center bg-white dark:bg-slate-900/80 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl">
+        <div class="lg:col-span-7">
+          <div class="relative group cursor-pointer overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-950" onclick="openLightbox('assets/WhatsApp Image 2026-10-24 at 20.37.29.jpeg', 'Fly Apps vs Fly Sprites: Feature-by-Feature Architectural Comparison')">
+            <div class="absolute inset-0 bg-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center">
+              <span class="bg-slate-900/80 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                <i data-lucide="zoom-in" class="w-4 h-4"></i> Expand Screenshot
+              </span>
+            </div>
+            <!-- Mock visual replica preview to handle cases where raw GitHub URL may need local mirror -->
+            <div class="p-6 text-slate-100 font-sans text-xs">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+                <span class="font-bold text-sm text-white flex items-center gap-2">
+                  <i data-lucide="scale" class="w-4 h-4 text-purple-400"></i> Feature-by-feature comparison
+                </span>
+                <span class="text-slate-400 font-mono text-[11px]">assets/WhatsApp Image ... 20.37.29.jpeg</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2 py-1.5 border-b border-slate-800/60 font-semibold text-slate-400 uppercase text-[10px]">
+                <div>Feature</div>
+                <div>Fly.io Apps (Machines)</div>
+                <div class="text-purple-400">Fly Sprites (sprites.dev)</div>
+              </div>
+              <div class="grid grid-cols-3 gap-2 py-2 border-b border-slate-800/40">
+                <span class="font-medium text-slate-300">🎯 Primary Use</span>
+                <span class="text-slate-400">Web apps, APIs, DBs</span>
+                <span class="text-purple-300">🤖 AI coding agents, sandboxes</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2 py-2 border-b border-slate-800/40">
+                <span class="font-medium text-slate-300">📦 Packaging</span>
+                <span class="text-slate-400">Docker / OCI images</span>
+                <span class="text-purple-300">Linux microVM (no Docker required)</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2 py-2 border-b border-slate-800/40">
+                <span class="font-medium text-slate-300">💾 Persistence</span>
+                <span class="text-slate-400">Ephemeral root + Fly Volumes</span>
+                <span class="text-purple-300">Persistent 100 GB root + NVMe cache</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2 py-2">
+                <span class="font-medium text-slate-300">⚡ Lifecycle</span>
+                <span class="text-slate-400">Scale-to-zero on HTTP</span>
+                <span class="text-purple-300">Auto pause/hibernate on idle; snapshots</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-mono font-medium">
+            <i data-lucide="file-image" class="w-3.5 h-3.5"></i> WhatsApp Image ... 20.37.29.jpeg
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
+            1. The Architectural Baseline Matrix
+          </h3>
+          <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+            <strong>Why this asset is in the repository:</strong> To eradicate the biggest developer misconception before writing a single line of code. Fly Apps are built for web traffic; Fly Sprites are built for autonomous code execution.
+          </p>
+          <ul class="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+            <li class="flex items-start gap-2">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 mt-0.5 shrink-0"></i>
+              <span><strong>Zero Docker overhead:</strong> Agents boot straight into a preconfigured Ubuntu/Debian microVM.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 mt-0.5 shrink-0"></i>
+              <span><strong>100 GB built-in persistent disk:</strong> Backed by object storage with NVMe tiered caching.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 mt-0.5 shrink-0"></i>
+              <span><strong>Checkpoint & Restore:</strong> Hibernate immediately when idle, restoring memory state in sub-seconds.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Item 2: Welcome Modal & Agent Support -->
+      <div class="grid lg:grid-cols-12 gap-8 items-center bg-white dark:bg-slate-900/80 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl">
+        <div class="lg:col-span-5 space-y-4 order-2 lg:order-1">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 text-xs font-mono font-medium">
+            <i data-lucide="file-image" class="w-3.5 h-3.5"></i> WhatsApp Image ... 21.07.05.jpeg
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
+            2. Ecosystem Support: Three Ways to Try Sprites
+          </h3>
+          <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+            <strong>Why this asset is in the repository:</strong> Demonstrates that Sprites are not vendor-locked to one AI agent. The welcome modal showcases native 1-click execution commands for every major agent currently available.
+          </p>
+          <div class="p-3 bg-slate-100 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/60">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-2">Supported Agents Documented:</span>
+            <div class="flex flex-wrap gap-1.5 font-mono text-xs">
+              <span class="px-2 py-1 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700">claude</span>
+              <span class="px-2 py-1 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700">cursor-agent</span>
+              <span class="px-2 py-1 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700">gemini</span>
+              <span class="px-2 py-1 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700">copilot</span>
+              <span class="px-2 py-1 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700">codex</span>
+              <span class="px-2 py-1 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700">antigravity</span>
+              <span class="px-2 py-1 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700">grok</span>
+              <span class="px-2 py-1 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700">muse</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 order-1 lg:order-2">
+          <div class="relative group cursor-pointer overflow-hidden rounded-2xl border border-purple-500/30 bg-[#0d091a] p-6 text-white" onclick="openLightbox('assets/WhatsApp Image 2026-10-24 at 21.07.05.jpeg', 'Welcome Modal: Three Ways to Try Sprites & Multi-Agent Compatibility')">
+            <div class="absolute inset-0 bg-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center">
+              <span class="bg-slate-900/80 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                <i data-lucide="zoom-in" class="w-4 h-4"></i> Expand Screenshot
+              </span>
+            </div>
+            <!-- Mock representation matching Screenshot 2 -->
+            <div class="border border-purple-500/40 rounded-xl p-5 bg-[#140f28]">
+              <span class="bg-purple-600 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded text-white">Welcome</span>
+              <h4 class="text-lg font-bold mt-2">Three ways to try Sprites</h4>
+              <p class="text-xs text-purple-200/70 mt-1">Pick whichever fits you. All three end with something running in a persistent cloud VM.</p>
+
+              <div class="mt-4 p-3 bg-purple-950/40 rounded-lg border border-purple-800/40 text-xs">
+                <div class="font-bold text-white flex items-center gap-1.5">
+                  <span class="w-4 h-4 rounded-full bg-purple-500 text-[10px] inline-flex items-center justify-center">1</span>
+                  Follow the guide in the sidebar
+                </div>
+                <p class="text-[11px] text-purple-300/80 mt-1">Step-by-step: log in, create a Sprite, serve HTTP, run background services, and time-travel with checkpoints.</p>
+              </div>
+
+              <div class="mt-3 p-3 bg-purple-950/40 rounded-lg border border-purple-800/40 text-xs">
+                <div class="font-bold text-white flex items-center gap-1.5">
+                  <span class="w-4 h-4 rounded-full bg-purple-500 text-[10px] inline-flex items-center justify-center">2</span>
+                  Host something with your favorite agent
+                </div>
+                <div class="grid grid-cols-2 gap-2 mt-2 font-mono text-[11px]">
+                  <div class="flex justify-between bg-black/40 px-2 py-1 rounded"><span>Claude</span><span class="text-purple-400">claude</span></div>
+                  <div class="flex justify-between bg-black/40 px-2 py-1 rounded"><span>Cursor</span><span class="text-purple-400">cursor-agent</span></div>
+                  <div class="flex justify-between bg-black/40 px-2 py-1 rounded"><span>Gemini</span><span class="text-purple-400">gemini</span></div>
+                  <div class="flex justify-between bg-black/40 px-2 py-1 rounded"><span>Copilot</span><span class="text-purple-400">copilot</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 3: Web Terminal CLI Experience -->
+      <div class="grid lg:grid-cols-12 gap-8 items-center bg-white dark:bg-slate-900/80 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl">
+        <div class="lg:col-span-7">
+          <div class="relative group cursor-pointer overflow-hidden rounded-2xl border border-slate-800 bg-[#0c1017] p-5 font-mono text-xs text-slate-300" onclick="openLightbox('assets/WhatsApp Image 2026-10-24 at 21.08.49.jpg', 'Web Terminal CLI: sprite create, org token provisioning & public HTTP server launch')">
+            <div class="absolute inset-0 bg-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center">
+              <span class="bg-slate-900/80 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                <i data-lucide="zoom-in" class="w-4 h-4"></i> Expand Screenshot
+              </span>
+            </div>
+            <!-- Shell Mock -->
+            <div class="flex items-center gap-2 pb-3 border-b border-slate-800 text-slate-400 text-[11px]">
+              <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+              <span class="ml-2 text-slate-400">web-terminal-boqry.sprites.app (tmux: [main] 0:sprite*)</span>
+            </div>
+            <div class="space-y-2 mt-4 text-[11px] leading-relaxed">
+              <p><span class="text-green-400">sprite@web-terminal:~$</span> sprite create my-sprite</p>
+              <p class="text-slate-400">Creating sprite <span class="text-green-400">my-sprite</span> in organization <span class="text-purple-400">erdem-391</span>...</p>
+              <p class="text-slate-400">✓ Created <span class="text-green-400">my-sprite</span> in 0.2s</p>
+              <p><span class="text-green-400">sprite@my-sprite:~$</span> python3 -m http.server 8080</p>
+              <p class="text-slate-400">Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...</p>
+              <p><span class="text-green-400">sprite@my-sprite:~$</span> sprite config update --url-auth public</p>
+              <div class="mt-3 p-2 bg-purple-950/40 border border-purple-800/40 rounded text-purple-300">
+                sprite_url: "https://my-sprite-boqry.sprites.app"
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-xs font-mono font-medium">
+            <i data-lucide="file-image" class="w-3.5 h-3.5"></i> WhatsApp Image ... 21.08.49.jpg
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
+            3. CLI Life-Cycle in the Web Terminal
+          </h3>
+          <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+            <strong>Why this asset is in the repository:</strong> To give an exact visual recipe of how rapid initialization is (a Sprite boots in <strong>0.2 seconds</strong>). It also captures essential CLI syntax for developer reference.
+          </p>
+          <div class="space-y-2 text-xs text-slate-600 dark:text-slate-300">
+            <p class="flex items-center gap-2">
+              <i data-lucide="chevron-right" class="w-4 h-4 text-purple-500"></i>
+              Organization binding: <code class="font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded">sprite create -o erdem-391</code>
+            </p>
+            <p class="flex items-center gap-2">
+              <i data-lucide="chevron-right" class="w-4 h-4 text-purple-500"></i>
+              Default network port: binds on <code class="font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded">0.0.0.0:8080</code>
+            </p>
+            <p class="flex items-center gap-2">
+              <i data-lucide="chevron-right" class="w-4 h-4 text-purple-500"></i>
+              URL Access Control: Toggle auth with <code class="font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded">--url-auth public</code>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 4: OAuth Flow & Headless Workarounds -->
+      <div class="grid lg:grid-cols-12 gap-8 items-center bg-white dark:bg-slate-900/80 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl">
+        <div class="lg:col-span-5 space-y-4 order-2 lg:order-1">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 text-xs font-mono font-medium">
+            <i data-lucide="file-image" class="w-3.5 h-3.5"></i> WhatsApp Image ... 21.11.18.jpg
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
+            4. Headless & Web Terminal Authentication Flow
+          </h3>
+          <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+            <strong>Why this asset is in the repository:</strong> Cloud shell terminals cannot always pop open desktop browsers natively. This screenshot explains the fallback OAuth token handshake required when running in remote environments.
+          </p>
+          <div class="p-3 bg-amber-50 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-800/40 text-xs text-amber-900 dark:text-amber-300">
+            <strong>Key Troubleshooting Insight:</strong>
+            Browsers often show "Popup blocked — click to finish Sprites login". The screenshot proves how the CLI provides both a direct clickable OAuth URI and an authorization code input field (<code class="font-mono">4/0AXlqoi6DOI...</code>) for headless resilience.
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 order-1 lg:order-2">
+          <div class="relative group cursor-pointer overflow-hidden rounded-2xl border border-slate-800 bg-[#0B0F17] p-5 font-mono text-xs text-slate-300" onclick="openLightbox('assets/WhatsApp Image 2026-10-24 at 21.11.18.jpg', 'Headless OAuth Authentication & Browser Fallback Authorization Code')">
+            <div class="absolute inset-0 bg-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center">
+              <span class="bg-slate-900/80 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                <i data-lucide="zoom-in" class="w-4 h-4"></i> Expand Screenshot
+              </span>
+            </div>
+            <!-- Rainbow 'A' Logo and Auth UI -->
+            <div class="flex items-center gap-4 mb-4">
+              <div class="text-2xl font-bold bg-gradient-to-r from-red-500 via-yellow-400 via-green-400 to-purple-500 bg-clip-text text-transparent">
+                ▲ Antigravity / Sprites Auth
+              </div>
+            </div>
+            <p class="text-slate-400 text-[11px]">Your browser should open automatically. If not:</p>
+            <div class="p-2.5 my-2 rounded bg-slate-900 border border-slate-800 text-[10px] break-all text-blue-400 leading-normal">
+              https://accounts.google.com/o/oauth2/auth?access_type=offline&client_id=1071006060591...
+            </div>
+            <p class="text-[11px] text-slate-400 mt-3">If you aren't automatically redirected, paste authorization code below:</p>
+            <div class="mt-1 p-2 bg-black/60 border border-slate-700 rounded text-emerald-400 text-[11px] font-mono">
+              4/0AXlqoi6DOI0Dt2XW-VQPrdpjhXbYlGFRch0N0VJn9B7aIiBWJZ6MOelrjkQYjJ3PsN9N8g
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 5: Automated Agent Task Execution -->
+      <div class="grid lg:grid-cols-12 gap-8 items-center bg-white dark:bg-slate-900/80 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl">
+        <div class="lg:col-span-7">
+          <div class="relative group cursor-pointer overflow-hidden rounded-2xl border border-slate-800 bg-[#0d1117] p-5 font-mono text-xs text-slate-300" onclick="openLightbox('assets/WhatsApp Image 2026-10-24 at 21.11.43.jpeg', 'chrometerminal Automation: Key Vault integration, Xiaomi MiMo sprite task & execution prompt')">
+            <div class="absolute inset-0 bg-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center">
+              <span class="bg-slate-900/80 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                <i data-lucide="zoom-in" class="w-4 h-4"></i> Expand Screenshot
+              </span>
+            </div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 text-slate-400 text-[11px]">
+              <span class="text-purple-400">chrometerminal.rifaterdemsahin.com</span>
+              <span class="text-slate-500">~/projects/fly.io-sprite</span>
+            </div>
+            <div class="space-y-1.5 mt-3 text-[11px] leading-relaxed">
+              <p class="text-purple-300 font-bold">> ### Task: Configure Fly.io Sprites and Key Vault for rifaterdemsahin/fly.io-sprite</p>
+              <p class="text-slate-400">**Repository:** https://github.com/rifaterdemsahin/fly.io-sprite</p>
+              <p class="text-slate-400">**Fly.io Org:** erdem-391</p>
+              <p class="text-slate-400">**Sprite Target:** `mimo-sprite`</p>
+              <p class="text-slate-300 pt-1">Step 1: Repo Structure (src/vault.js, src/index.js, public/mimo-sprite.svg)</p>
+              <p class="text-slate-300">Step 2: Connect to Azure Key Vault using `VAULT_SECRET_NAME="MIMO_API_KEY"`</p>
+              <p class="text-emerald-400">Step 3: Serve mascot on 0.0.0.0:8080 with animated SVG & health check</p>
+              <div class="p-2 mt-2 bg-slate-900 rounded border border-slate-800 text-[10px] text-slate-400 flex items-center justify-between">
+                <span>Thought for 9.9s (Goal: configure persistent cloud Sprite)</span>
+                <span class="text-emerald-400">Gemini 3.8 Flash</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-xs font-mono font-medium">
+            <i data-lucide="file-image" class="w-3.5 h-3.5"></i> WhatsApp Image ... 21.11.43.jpeg
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
+            5. The Production Automation Harness
+          </h3>
+          <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+            <strong>Why this asset is in the repository:</strong> It showcases the actual agent execution terminal (<code class="font-mono text-xs">chrometerminal</code>) in action. It defines how an AI agent is instructed to deploy secrets safely without committing credentials to Git.
+          </p>
+          <ul class="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+            <li class="flex items-start gap-2">
+              <i data-lucide="shield-check" class="w-4 h-4 text-purple-500 mt-0.5 shrink-0"></i>
+              <span><strong>Key Vault Secret Management:</strong> Fetches API keys directly at runtime inside the Sprite microVM.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="code" class="w-4 h-4 text-purple-500 mt-0.5 shrink-0"></i>
+              <span><strong>Mascot & Canvas Assets:</strong> Deploys <code class="font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded">mimo-sprite.svg</code> to visualize live health status on port 8080.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="play" class="w-4 h-4 text-purple-500 mt-0.5 shrink-0"></i>
+              <span><strong>Automated Scripts:</strong> Executes <code class="font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded">setup-sprite.sh</code> and <code class="font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded">deploy-sprite.sh</code> remotely.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section 4: Quick Reference CLI Cheatsheet -->
+  <section id="cheatsheet" class="py-16 md:py-20 bg-slate-100/60 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+          Fly.io Sprites Quick Reference Cheatsheet
+        </h2>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
+          Synthesized from the commands and prompts proven in the assets folder.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <!-- Command 1 -->
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide">1. Authenticate</div>
+            <p class="text-xs text-slate-500 mt-1">Logs into Sprites service & issues organization token.</p>
+          </div>
+          <div class="mt-3 flex items-center justify-between bg-slate-100 dark:bg-slate-950 px-3 py-2 rounded-lg font-mono text-xs">
+            <span class="text-purple-600 dark:text-purple-300">sprite login</span>
+            <button onclick="copySnippet('sprite login', this)" class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Command 2 -->
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide">2. Create Sprite Instance</div>
+            <p class="text-xs text-slate-500 mt-1">Spins up persistent 100 GB microVM in organization.</p>
+          </div>
+          <div class="mt-3 flex items-center justify-between bg-slate-100 dark:bg-slate-950 px-3 py-2 rounded-lg font-mono text-xs">
+            <span class="text-purple-600 dark:text-purple-300">sprite create -o erdem-391 mimo-sprite</span>
+            <button onclick="copySnippet('sprite create -o erdem-391 mimo-sprite', this)" class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Command 3 -->
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide">3. Expose Public URL</div>
+            <p class="text-xs text-slate-500 mt-1">Allows unauthenticated public browser access to port 8080.</p>
+          </div>
+          <div class="mt-3 flex items-center justify-between bg-slate-100 dark:bg-slate-950 px-3 py-2 rounded-lg font-mono text-xs">
+            <span class="text-purple-600 dark:text-purple-300">sprite config update --url-auth public</span>
+            <button onclick="copySnippet('sprite config update --url-auth public', this)" class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Command 4 -->
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide">4. Fast Health Check Server</div>
+            <p class="text-xs text-slate-500 mt-1">Quick static verification inside the new Sprite microVM.</p>
+          </div>
+          <div class="mt-3 flex items-center justify-between bg-slate-100 dark:bg-slate-950 px-3 py-2 rounded-lg font-mono text-xs">
+            <span class="text-purple-600 dark:text-purple-300">python3 -m http.server 8080</span>
+            <button onclick="copySnippet('python3 -m http.server 8080', this)" class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 py-10 bg-white dark:bg-slate-950 text-slate-500 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-800 dark:text-slate-200">fly.io-sprite</span>
+        <span>•</span>
+        <span>Visual Asset & Architecture Documentation</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="https://github.com/rifaterdemsahin/fly.io-sprite" target="_blank" class="hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1">
+          <i data-lucide="github" class="w-3.5 h-3.5"></i> Repository
+        </a>
+        <a href="https://github.com/rifaterdemsahin/fly.io-sprite/tree/main/assets" target="_blank" class="hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1">
+          <i data-lucide="folder" class="w-3.5 h-3.5"></i> /assets Tree
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox / Modal for High-Res Inspection -->
+  <div id="imageModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none flex items-center justify-center p-4">
+    <div class="relative max-w-4xl w-full bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden shadow-2xl">
+      <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+        <h4 id="modalTitle" class="text-white text-sm font-semibold truncate pr-4">Asset Details</h4>
+        <button onclick="closeLightbox()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-6 text-center space-y-4">
+        <div id="modalContent" class="text-left text-sm text-slate-300">
+          <!-- Populated by JS -->
+        </div>
+        <div class="pt-4 border-t border-slate-800 flex justify-end gap-3">
+          <a id="modalGitHubLink" href="https://github.com/rifaterdemsahin/fly.io-sprite/tree/main/assets" target="_blank" class="px-4 py-2 text-xs font-semibold rounded-lg bg-purple-600 hover:bg-purple-500 text-white inline-flex items-center gap-2">
+            <i data-lucide="external-link" class="w-4 h-4"></i> View in GitHub Assets
+          </a>
+          <button onclick="closeLightbox()" class="px-4 py-2 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-white">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast for Copy -->
+  <div id="copyToast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-lg border border-slate-700 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center gap-2">
+    <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastMessage">Copied to clipboard!</span>
+  </div>
+
+  <script>
+    // Initialize icons
+    lucide.createIcons();
+
+    // Dark Mode Toggle Logic
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const html = document.documentElement;
+
+    // Check system preference or default to dark for developer aesthetic
+    if (localStorage.getItem('theme') === 'light') {
+      html.classList.remove('dark');
+      themeIcon.setAttribute('data-lucide', 'sun');
+    } else {
+      html.classList.add('dark');
+      themeIcon.setAttribute('data-lucide', 'moon');
+    }
+    lucide.createIcons();
+
+    themeToggle.addEventListener('click', () => {
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        themeIcon.setAttribute('data-lucide', 'sun');
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        themeIcon.setAttribute('data-lucide', 'moon');
+      }
+      lucide.createIcons();
+    });
+
+    // Copy to clipboard helper
+    function copySnippet(text, buttonElement) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast(`Copied: "${text}"`);
+      } catch (err) {
+        showToast('Failed to copy');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('copyToast');
+      const text = document.getElementById('toastMessage');
+      text.innerText = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      toast.classList.add('opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 2000);
+    }
+
+    // Modal / Lightbox functionality
+    function openLightbox(assetName, description) {
+      const modal = document.getElementById('imageModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalContent = document.getElementById('modalContent');
+      const githubLink = document.getElementById('modalGitHubLink');
+
+      modalTitle.innerText = description;
+      modalContent.innerHTML = `
+        <div class="bg-black/60 p-4 rounded-xl border border-slate-800 mb-3 font-mono text-xs text-purple-300">
+          <strong>Asset Path:</strong> ${assetName}
+        </div>
+        <p class="text-sm text-slate-300 mb-4 leading-relaxed">
+          This capture was preserved in the repository to serve as technical ground truth for the 
+          <strong>${description}</strong> phase of Fly.io Sprites implementation.
+        </p>
+        <div class="p-3 bg-purple-950/30 border border-purple-800/40 rounded-lg text-xs text-purple-200">
+          💡 Reference this asset when auditing sandbox lifecycle management, multi-agent commands, or organization secrets binding.
+        </div>
+      `;
+      githubLink.href = `https://github.com/rifaterdemsahin/fly.io-sprite/tree/main/assets`;
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.classList.add('opacity-100');
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById('imageModal');
+      modal.classList.remove('opacity-100');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    // Close on backdrop click
+    document.getElementById('imageModal').addEventListener('click', (e) => {
+      if (e.target.id === 'imageModal') {
+        closeLightbox();
+      }
+    });
+  </script>
+</body>
+</html>
